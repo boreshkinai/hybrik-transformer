@@ -25,6 +25,7 @@ visdom
 pycocotools
 tqdm
 tensorboardx
+tensorboard
 easydict
 pyyaml
 future

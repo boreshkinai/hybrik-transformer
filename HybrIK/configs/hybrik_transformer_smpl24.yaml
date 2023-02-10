@@ -18,8 +18,8 @@ DATASET:
   OCCLUSION: True
 MODEL:
   TYPE: 'HybrikTransformerSMPL24'
-  PRETRAINED: './exp/mix_smpl/hybrik_transformer_smpl24.yaml-hybrik_transformer_blocks6_layers3_lw512_dp0.1_multistep150_200_lr0.000125_gamma0.5_aug/model_89.pth'
-  TRY_LOAD: '' # 'model_files/pretrained/pretrained_res34.pth' # 
+  PRETRAINED: ''
+  TRY_LOAD: ''
   IMAGE_SIZE:
   - 256
   - 256
@@ -70,21 +70,13 @@ TEST:
 TRAIN:
   WORLD_SIZE: 4
   BATCH_SIZE: 64
-  BEGIN_EPOCH: 90
+  BEGIN_EPOCH: 0
   END_EPOCH: 200
   OPTIMIZER: 'adam'
   SCHEDULER:
-#     TYPE: 'InverseSquareRoot'
-#     WARMUP_UPDATES: 4000
-#     WARMUP_END_LR: 0.0005
-    TYPE: 'MultiStepWithWarmup'
+    TYPE: 'InverseSquareRoot'
     WARMUP_UPDATES: 4000
-    WARMUP_END_LR: 0.000125
-    GAMMA: 0.5
-    MILESTONES:
-    - 150000
-    - 200000
-    - 250000
+    WARMUP_END_LR: 0.0005
   LR: 0.0005
   DPG_MILESTONE: 140
   DPG_STEP:

@@ -15,8 +15,6 @@ from .builder import SPPE
 from .layers.Resnet import ResNet
 from .layers.smpl.SMPL import SMPL_layer
 
-from pytorch3d.transforms import rotation_6d_to_matrix, matrix_to_axis_angle
-
 from .layers.smpl.lbs import rotmat_to_quat
 
 
