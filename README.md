@@ -19,7 +19,7 @@ Build image and start the lightweight docker container. Note that this assumes t
 cd hybrik-transformer
 docker build -f Dockerfile -t hybrik_transformer:$USER .
 
-nvidia-docker run -p 8888:8888 -p 6000-6010:6000-6010 -v ~/workspace/hybrik-transformer:/workspace/hybrik-transformer -v /home/hybrik-transformer/data:/workspace/hybrik-transformer/HybrIK/data -t -d --shm-size="16g" --name hybrik_transformer_$USER hybrik_transformer:$USER
+nvidia-docker run -p 8888:8888 -p 6000-6010:6000-6010 -v ~/workspace/hybrik-transformer:/workspace/hybrik-transformer -v /home/pose-estimation/data:/workspace/hybrik-transformer/HybrIK/data -t -d --shm-size="16g" --name hybrik_transformer_$USER hybrik_transformer:$USER
 
 ```
 Enter docker container and download data locally
