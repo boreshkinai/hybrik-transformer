@@ -3,7 +3,7 @@
 This is the implementation of this paper:
 https://arxiv.org/abs/2302.04774
 
-Based on this orogonal code: https://github.com/Jeff-sjtu/HybrIK
+Based on this original code: https://github.com/Jeff-sjtu/HybrIK
 
 ## Register to get SMPL model
 here: https://smpl.is.tue.mpg.de/register.php
@@ -35,5 +35,5 @@ bash scripts/download_data_gcp.sh
 Launch training session
 ```
 cd HybrIK
-./scripts/train_smpl.sh train_res34 ./configs/256x192_adam_lr1e-3-res34_smpl_3d_base_2x_mix.yaml
+./scripts/train_smpl.sh hybrik_transformer ./configs/hybrik_transformer_smpl24.yaml
 ```
