@@ -1,9 +1,5 @@
 # pose-estimation
 
-## This project requires [git-lfs](https://git-lfs.github.com/) 
-
-Before cloning, install on Linux ```sudo apt-get install git-lfs```
-
 ## Register to get SMPL model
 here: https://smpl.is.tue.mpg.de/register.php
 https://smplify.is.tue.mpg.de/register.php
