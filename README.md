@@ -1,4 +1,8 @@
-# pose-estimation
+# HybrIK-Transformer
+
+This is the implementation of this paper
+https://arxiv.org/abs/2302.04774
+Based on this orogonal code: https://github.com/Jeff-sjtu/HybrIK
 
 ## Register to get SMPL model
 here: https://smpl.is.tue.mpg.de/register.php
