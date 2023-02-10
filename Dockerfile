@@ -3,8 +3,7 @@
 # ===========
 FROM pytorch/pytorch:1.5.1-cuda10.1-cudnn7-runtime as pytorch
 
-ENV PROJECT_PATH /workspace/pose-estimation
-ENV HYBRIDIK_PATH ${PROJECT_PATH}/HybrIK
+ENV PROJECT_PATH /workspace/hybrik-transformer
 
 RUN date
 RUN apt-get update && apt-get install -y locales && locale-gen en_US.UTF-8 && apt-get install -y git && apt-get -y install g++
@@ -57,11 +56,5 @@ RUN apt update && apt install -y apt-transport-https ca-certificates gnupg
 RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - && \
     apt-get update -y && apt-get install google-cloud-sdk -y
-
-#COPY ./HybrIK $HYBRIDIK_PATH
-
-#RUN cd $HYBRIDIK_PATH && python setup.py develop
-
-#RUN rm -rf $HYBRIDIK_PATH
 
 WORKDIR ${PROJECT_PATH}
