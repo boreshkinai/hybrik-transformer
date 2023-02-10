@@ -10,15 +10,14 @@ https://smplify.is.tue.mpg.de/register.php
 
 ```cd workspace```
 
-```git clone git@github.com:boreshkinai/pose-estimation.git```
-
-```cd pose-estimation && git lfs install && git lfs pull``` 
+```git clone git@github.com:boreshkinai/hybrik-transformer.git```
 
 ## Build docker image and launch container
 
 Build image and start the lightweight docker container. Note that this assumes that the data for the project will be stored in the shared folder /home/pose-estimation accessible to you and other project members. 
 ```
-docker build -f src/docker/DockerfileNoData -t pose_estimation:$USER .
+cd hybrik-transformer
+docker build -f Dockerfile -t hybrik_transformer:$USER .
 
 nvidia-docker run -p 8888:8888 -p 6000-6010:6000-6010 -v ~/workspace/pose-estimation:/workspace/pose-estimation -v /home/pose-estimation/data:/workspace/pose-estimation/HybrIK/data -v /home/pose-estimation/model_files:/workspace/pose-estimation/HybrIK/model_files -t -d --shm-size="8g" --name pose_estimation_$USER pose_estimation:$USER
 
