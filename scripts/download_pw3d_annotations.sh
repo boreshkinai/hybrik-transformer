@@ -1,4 +1,4 @@
-PROJECT_PATH=/workspace/pose-estimation
+PROJECT_PATH=/workspace/hybrik-transformer
 HYBRIDIK_PATH=${PROJECT_PATH}/HybrIK
 
 
