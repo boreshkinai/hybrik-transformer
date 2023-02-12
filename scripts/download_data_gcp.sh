@@ -1,6 +1,6 @@
-PROJECT_PATH=/workspace/pose-estimation
+PROJECT_PATH=/workspace/hybrik-transformer
 HYBRIDIK_PATH=${PROJECT_PATH}/HybrIK
-GCP_BUCKET=gs://pose-estimation-data
+GCP_BUCKET=gs://hybrik-transformer
 
 
 cp $PROJECT_PATH/model_files/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl $HYBRIDIK_PATH/model_files/
