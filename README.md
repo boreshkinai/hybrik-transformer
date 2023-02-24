@@ -34,6 +34,7 @@ bash scripts/download_data_gcp.sh
 ```
 Launch training session
 ```
+docker exec -i -t hybrik_transformer_$USER  /bin/bash 
 cd HybrIK
 ./scripts/train_smpl.sh hybrik_transformer ./configs/hybrik_transformer_smpl24.yaml
 ```
