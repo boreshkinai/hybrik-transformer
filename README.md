@@ -1,4 +1,4 @@
-# HybrIK-Transformer
+# 3D Human Pose and Shape Estimation via HybrIK-Transformer
 
 This is the implementation of this paper:
 https://arxiv.org/abs/2302.04774
