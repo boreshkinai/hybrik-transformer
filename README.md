@@ -13,9 +13,7 @@ https://smplify.is.tue.mpg.de/register.php
 
 ```
 mkdir workspace
-
 cd workspace
-
 git clone git@github.com:boreshkinai/hybrik-transformer.git
 ```
 
