@@ -11,11 +11,13 @@ https://smplify.is.tue.mpg.de/register.php
 
 ## Create workspace and clone this repository
 
-```mkdir workspace```
+```
+mkdir workspace
 
-```cd workspace```
+cd workspace
 
-```git clone git@github.com:boreshkinai/hybrik-transformer.git```
+git clone git@github.com:boreshkinai/hybrik-transformer.git
+```
 
 ## Build docker image and launch container
 
