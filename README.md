@@ -25,7 +25,6 @@ cd hybrik-transformer
 docker build -f Dockerfile -t hybrik_transformer:$USER .
 
 nvidia-docker run -p 8888:8888 -p 6000-6010:6000-6010 -v ~/workspace/hybrik-transformer:/workspace/hybrik-transformer -t -d --shm-size="16g" --name hybrik_transformer_$USER hybrik_transformer:$USER
-
 ```
 Enter docker container and download data locally
 ```
