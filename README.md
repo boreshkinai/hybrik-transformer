@@ -19,7 +19,7 @@ git clone git@github.com:boreshkinai/hybrik-transformer.git
 
 ## Build docker image and launch container
 
-Build image and start the lightweight docker container. Note that this assumes that the data for the project will be stored in the shared folder /home/pose-estimation accessible to you and other project members. 
+Build image and start the lightweight docker container. 
 ```
 cd hybrik-transformer
 docker build -f Dockerfile -t hybrik_transformer:$USER .
