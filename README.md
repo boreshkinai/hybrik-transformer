@@ -10,7 +10,6 @@ here: https://smpl.is.tue.mpg.de/register.php
 https://smplify.is.tue.mpg.de/register.php
 
 ## Create workspace and clone this repository
-
 ```
 mkdir workspace
 cd workspace
@@ -18,8 +17,6 @@ git clone git@github.com:boreshkinai/hybrik-transformer.git
 ```
 
 ## Build docker image and launch container
-
-Build image and start the lightweight docker container. 
 ```
 cd hybrik-transformer
 docker build -f Dockerfile -t hybrik_transformer:$USER .
