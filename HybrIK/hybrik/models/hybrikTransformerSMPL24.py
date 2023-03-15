@@ -517,7 +517,8 @@ class HybrikTransformerSMPL24(nn.Module):
     def uvd_to_cam(self, uvd_jts, trans_inv, intrinsic_param, joint_root, depth_factor, return_relative=True):
         assert uvd_jts.dim() == 3 and uvd_jts.shape[2] == 3, uvd_jts.shape
         uvd_jts_new = uvd_jts.clone()
-        assert torch.sum(torch.isnan(uvd_jts)) == 0, ('uvd_jts', uvd_jts)
+        if torch.sum(torch.isnan(uvd_jts)) > 0:
+            return torch.zeros_like(uvd_jts)
 
         # remap uv coordinate to input space
         uvd_jts_new[:, :, 0] = (uvd_jts[:, :, 0] + 0.5) * self.width_dim * 4
@@ -653,6 +654,21 @@ class HybrikTransformerSMPL24(nn.Module):
             pred_uvd_jts_24 = (pred_uvd_jts_24 + pred_uvd_jts_24_orig.reshape(batch_size, 24, 3)) / 2
 
         pred_uvd_jts_24_flat = pred_uvd_jts_24.reshape((batch_size, self.num_joints * 3))
+        
+        if torch.sum(torch.isnan(pred_uvd_jts_24)) > 0:
+            return ModelOutput(
+                pred_phi=torch.zeros(batch_size, 23, 2).to(pred_uvd_jts_24),
+                pred_leaf=torch.zeros(batch_size, 5, 4).to(pred_uvd_jts_24),
+                pred_delta_shape=self.init_shape.expand(batch_size, -1),
+                pred_shape=self.init_shape.expand(batch_size, -1),
+                pred_theta_mats=torch.zeros(batch_size, 24 * 4).to(pred_uvd_jts_24),
+                pred_uvd_jts=torch.zeros(batch_size, self.num_joints * 3).to(pred_uvd_jts_24),
+                pred_xyz_jts_24=torch.zeros(batch_size, 72).to(pred_uvd_jts_24) * x0.sum(),
+                pred_xyz_jts_24_struct=torch.zeros(batch_size, 72).to(pred_uvd_jts_24) * x0.sum(),
+                pred_xyz_jts_17=torch.zeros(batch_size, 17*3).to(pred_uvd_jts_24) * x0.sum(),
+                pred_vertices=torch.zeros(batch_size, 6890, 3).to(pred_uvd_jts_24),
+                maxvals=maxvals
+            )
 
         #  -0.5 ~ 0.5
         # Rotate back
