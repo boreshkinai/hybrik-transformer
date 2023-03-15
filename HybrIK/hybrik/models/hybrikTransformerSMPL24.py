@@ -1,6 +1,6 @@
 # -----------------------------------------------------
-# Copyright (c) Shanghai Jiao Tong University. All rights reserved.
-# Written by Jiefeng Li (jeff.lee.sjtu@gmail.com)
+# Copyright (c) Boris Oreshkin. All rights reserved.
+# Written by Boris Oreshkin (boris.oreshkin@gmail.com)
 # -----------------------------------------------------
 from typing import Tuple
 from collections import namedtuple
@@ -16,6 +16,7 @@ from .layers.Resnet import ResNet
 from .layers.smpl.SMPL import SMPL_layer
 
 from .layers.smpl.lbs import rotmat_to_quat
+from .layers.hrnet.hrnet import get_hrnet
 
 
 class ScaledDotProductAttention(nn.Module):
@@ -407,37 +408,42 @@ class HybrikTransformerSMPL24(nn.Module):
         self.height_dim = kwargs['HEATMAP_SIZE'][0]
         self.width_dim = kwargs['HEATMAP_SIZE'][1]
         self.smpl_dtype = torch.float32
+        self.backbone_type = kwargs['BACKBONE']
+        
+        if self.backbone_type == 'RESNET':
+            
+            backbone = ResNet
 
-        backbone = ResNet
+            self.preact = backbone(f"resnet{kwargs['NUM_LAYERS']}")
 
-        self.preact = backbone(f"resnet{kwargs['NUM_LAYERS']}")
-                
-        # Imagenet pretrain model
-        import torchvision.models as tm
-        if kwargs['NUM_LAYERS'] == 101:
-            ''' Load pretrained model '''
-            x = tm.resnet101(pretrained=True)
+            # Imagenet pretrain model
+            import torchvision.models as tm
+            if kwargs['NUM_LAYERS'] == 101:
+                ''' Load pretrained model '''
+                x = tm.resnet101(pretrained=True)
+                self.feature_channel = 2048
+            elif kwargs['NUM_LAYERS'] == 50:
+                x = tm.resnet50(pretrained=True)
+                self.feature_channel = 2048
+            elif kwargs['NUM_LAYERS'] == 34:
+                x = tm.resnet34(pretrained=True)
+                self.feature_channel = 512
+            elif kwargs['NUM_LAYERS'] == 18:
+                x = tm.resnet18(pretrained=True)
+                self.feature_channel = 512
+            else:
+                raise NotImplementedError
+            model_state = self.preact.state_dict()
+            state = {k: v for k, v in x.state_dict().items()
+                     if k in self.preact.state_dict() and v.size() == self.preact.state_dict()[k].size()}
+            model_state.update(state)
+            self.preact.load_state_dict(model_state)
+        elif self.backbone_type == 'HRNET':
+            
+            self.preact = get_hrnet(kwargs['NUM_LAYERS'], num_joints=self.num_joints,
+                                    depth_dim=self.depth_dim,
+                                    is_train=True, generate_feat=True, generate_hm=False)
             self.feature_channel = 2048
-        elif kwargs['NUM_LAYERS'] == 50:
-            x = tm.resnet50(pretrained=True)
-            self.feature_channel = 2048
-        elif kwargs['NUM_LAYERS'] == 34:
-            x = tm.resnet34(pretrained=True)
-            self.feature_channel = 512
-        elif kwargs['NUM_LAYERS'] == 18:
-            x = tm.resnet18(pretrained=True)
-            self.feature_channel = 512
-        else:
-            raise NotImplementedError
-        model_state = self.preact.state_dict()
-        state = {k: v for k, v in x.state_dict().items()
-                 if k in self.preact.state_dict() and v.size() == self.preact.state_dict()[k].size()}
-        model_state.update(state)
-        self.preact.load_state_dict(model_state)
-
-        self.deconv_layers = self._make_deconv_layer()
-        self.final_layer = nn.Conv2d(
-            self.deconv_dim[2], self.num_joints * self.depth_dim, kernel_size=1, stride=1, padding=0)
 
         h36m_jregressor = np.load('./model_files/J_regressor_h36m.npy')
         self.smpl = SMPL_layer(
@@ -455,16 +461,6 @@ class HybrikTransformerSMPL24(nn.Module):
         # mean shape
         init_shape = np.load('./model_files/h36m_mean_beta.npy')
         self.register_buffer('init_shape', torch.Tensor(init_shape).float())
-
-#         self.avg_pool = nn.AdaptiveAvgPool2d(1)
-#         self.fc1 = nn.Linear(self.feature_channel, 1024)
-#         self.drop1 = nn.Dropout(p=0.5)
-#         self.fc2 = nn.Linear(1024, 1024)
-#         self.drop2 = nn.Dropout(p=0.5)
-#         self.decshape = nn.Linear(1024, 10)
-#         self.decphi = nn.Linear(1024, 23 * 2)  # [cos(phi), sin(phi)]
-#         self.decleaf = nn.Linear(1024, 5 * 4)  # rot_mat quat
-        
         
         self.register_parameter('joint_embeddings',
                                 torch.nn.Parameter(torch.randn(29, self.feature_channel).float()))
@@ -515,17 +511,8 @@ class HybrikTransformerSMPL24(nn.Module):
         return nn.Sequential(*deconv_layers)
 
     def _initialize(self):
-        for name, m in self.deconv_layers.named_modules():
-            if isinstance(m, nn.ConvTranspose2d):
-                nn.init.normal_(m.weight, std=0.001)
-            elif isinstance(m, nn.BatchNorm2d):
-                nn.init.constant_(m.weight, 1)
-                nn.init.constant_(m.bias, 0)
-        for m in self.final_layer.modules():
-            if isinstance(m, nn.Conv2d):
-                nn.init.normal_(m.weight, std=0.001)
-                nn.init.constant_(m.bias, 0)
         self.pos_embedding.reset_parameters()
+        
 
     def uvd_to_cam(self, uvd_jts, trans_inv, intrinsic_param, joint_root, depth_factor, return_relative=True):
         assert uvd_jts.dim() == 3 and uvd_jts.shape[2] == 3, uvd_jts.shape
@@ -656,24 +643,6 @@ class HybrikTransformerSMPL24(nn.Module):
         maxvals = torch.ones((*pred_uvd_jts_24.shape[:2], 1), dtype=torch.float, device=x0.device)
         
         ############################################
-        
-
-#         x0 = self.avg_pool(x0)
-#         x0 = x0.view(x0.size(0), -1)
-#         init_shape = self.init_shape.expand(batch_size, -1)     # (B, 10,)
-
-#         xc = x0
-
-#         xc = self.fc1(xc)
-#         xc = self.drop1(xc)
-#         xc = self.fc2(xc)
-#         xc = self.drop2(xc)
-
-#         delta_shape = self.decshape(xc)
-#         pred_shape = delta_shape + init_shape
-#         pred_phi = self.decphi(xc)
-#         pred_leaf = self.decleaf(xc)
-
         if flip_item is not None:
             assert flip_output
             pred_uvd_jts_24_orig, pred_phi_orig, pred_leaf_orig, pred_shape_orig = flip_item

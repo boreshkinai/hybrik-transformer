@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 .idea
+HybrIK/model_files
 HybrIK/tensorboard
 HybrIK/tools
 model_data
