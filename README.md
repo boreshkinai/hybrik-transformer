@@ -34,3 +34,13 @@ docker exec -i -t hybrik_transformer_$USER  /bin/bash
 cd HybrIK
 ./scripts/train_smpl.sh hybrik_transformer ./configs/hybrik_transformer_smpl24.yaml
 ```
+
+## MODEL ZOO
+
+| Backbone | Training Data |     PA-MPJPE (3DPW)     | MPJPE (3DPW) | PA-MPJPE (Human3.6M) | MPJPE (Human3.6M) |  Download | Config |  
+|----------|----------|------------|------------|-------|-----------|--------|--------------|
+| ResNet-34           | w/o 3DPW | | | | | [model]() | [cfg]()    |
+| ResNet-34          | w/ 3DPW | - | - | - | - | [model](-) | [cfg](-)    |
+| HRNet-W48           | w/o 3DPW | 43.7 | 75.1 | 29.5 | 46.1 | [model](https://storage.googleapis.com/hybrik-transformer/trained_models/average_model_hrnet_181_199.pth) | [cfg](./HybrIK/configs/hybrik_transformer_smpl24_hrnet.yaml)    |
+| HRNet-W48          | w/ 3DPW | - | - | - | - | [model](-) | [cfg](-)    |
+
