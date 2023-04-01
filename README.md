@@ -40,7 +40,7 @@ cd HybrIK
 | Backbone | Training Data |     PA-MPJPE (3DPW)     | MPJPE (3DPW) | PA-MPJPE (Human3.6M) | MPJPE (Human3.6M) |  Download | Config |  
 |----------|----------|------------|------------|-------|-----------|--------|--------------|
 | ResNet-34           | w/o 3DPW | | | | | [model]() | [cfg]()    |
-| ResNet-34          | w/ 3DPW | - | - | - | - | [model](-) | [cfg](-)    |
+| ResNet-34          | w/ 3DPW | 46.0 | 74.9 | 34.6 | 50.2 | [model](https://storage.googleapis.com/hybrik-transformer/trained_models/average_model_resnet34_181_199.pth) | [cfg](-./HybrIK/configs/hybrik_transformer_smpl24_w_pw3d.yaml)    |
 | HRNet-W48           | w/o 3DPW | 43.7 | 75.1 | 29.5 | 46.1 | [model](https://storage.googleapis.com/hybrik-transformer/trained_models/average_model_hrnet_181_199.pth) | [cfg](./HybrIK/configs/hybrik_transformer_smpl24_hrnet.yaml)    |
 | HRNet-W48          | w/ 3DPW | - | - | - | - | [model](-) | [cfg](-)    |
 
