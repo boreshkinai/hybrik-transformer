@@ -21,7 +21,7 @@ DATASET:
 MODEL:
   TYPE: 'HybrikTransformerSMPL24'
   PRETRAINED: ''
-  TRY_LOAD: '' # 'exp/mix_smpl_w_pw3d/hybrik_transformer_smpl24_hrnet_w_pw3d.yaml-hybrik_transformer_warmup_4000_hrnet_bs32_lr0.00025_w_pw3d/model_87.pth'
+  TRY_LOAD: ''
   IMAGE_SIZE:
   - 256
   - 256
@@ -72,14 +72,14 @@ TEST:
   HEATMAP2COORD: 'coord'
 TRAIN:
   WORLD_SIZE: 4
-  BATCH_SIZE: 32
+  BATCH_SIZE: 56
   BEGIN_EPOCH: 0
   END_EPOCH: 200
   OPTIMIZER: 'adam'
   SCHEDULER:
     TYPE: 'InverseSquareRoot'
     WARMUP_UPDATES: 4000
-    WARMUP_END_LR: 0.00025
+    WARMUP_END_LR: 0.0005
   LR: 0.0005
   DPG_MILESTONE: 140
   DPG_STEP:
