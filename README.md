@@ -2,6 +2,17 @@
 
 This is the implementation of this paper:
 https://arxiv.org/abs/2302.04774
+If you use this code in any context, please cite the following paper:
+```
+@misc{oreshkin20233d,
+      title={{3D} Human Pose and Shape Estimation via {HybrIK-Transformer}}, 
+      author={Boris N. Oreshkin},
+      year={2023},
+      eprint={2302.04774},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+```
 
 Based on this original code: https://github.com/Jeff-sjtu/HybrIK
 
